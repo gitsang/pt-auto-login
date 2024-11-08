@@ -79,6 +79,8 @@ docker: $(PREREQUISITES)
 ## push docker image
 push:
 	$(DOCKER) push $(DOCKER_IMAGE)
+	$(DOCKER) tag $(DOCKER_IMAGE) $(DOCKER_REGISTRY)/$(DOCKER_PROJECT):latest
+	$(DOCKER) push $(DOCKER_REGISTRY)/$(DOCKER_PROJECT):latest
 
 .PHONY: docker-run
 ## run docker image

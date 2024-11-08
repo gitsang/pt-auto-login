@@ -22,5 +22,4 @@ class DriverUtils:
 
     @classmethod
     def close_driver(cls, driver):
-        # 关闭 WebDriver
         driver.quit()

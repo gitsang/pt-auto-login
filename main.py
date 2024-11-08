@@ -50,7 +50,7 @@ def login():
         otp_code_input.send_keys(totp_code)
 
         # 4.2 click verify button
-        span_element = driver.find_element(By.XPATH, "//span[text()='???']")
+        span_element = driver.find_element(By.XPATH, "//span[text()='登 錄']")
         login_button= span_element.find_element(By.XPATH, "./ancestor::button")
         login_button.click()
 

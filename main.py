@@ -1,17 +1,13 @@
 from pages.base_page import BasePage
 from utils.driver_utils import DriverUtils
 from selenium.webdriver.common.by import By
-from crontab import CronTab
+from dotenv import load_dotenv
 import os
 import pyotp
 
 def login():
     # 0. prepare
     driver = DriverUtils.get_driver()
-    base_url = os.getenv('BASE_URL') or ""
-    username = os.getenv('USERNAME') or ""
-    password = os.getenv('PASSWORD') or ""
-    totp_secret = os.getenv('TOTP_SECRET') or ""
 
     # 1. open login page
     page = BasePage(driver)
@@ -31,7 +27,7 @@ def login():
 
     # 4. input otp code
     otp_code_input= driver.find_element(By.ID, "otpCode")
-    totp = pyotp.TOTP(totp_secret)
+    totp = pyotp.TOTP(totp_sec)
     totp_code = totp.now()
     otp_code_input.send_keys(totp_code)
 
@@ -44,4 +40,12 @@ def login():
     DriverUtils.close_driver(driver)
 
 if __name__ == "__main__":
-    cron = CronTab(user='root')
+    # 0. load environment
+    load_dotenv()
+    base_url = os.getenv('BASE_URL') or ""
+    username = os.getenv('USERNAME') or ""
+    password = os.getenv('PASSWORD') or ""
+    totp_sec = os.getenv('TOTP_SEC') or ""
+
+    # 1. login
+    login()

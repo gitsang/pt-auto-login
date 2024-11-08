@@ -1,8 +1,8 @@
-FROM debian:bullseye-slim
+FROM python:3.13-bookworm
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-        ca-certificates python3 python3-pip python3-setuptools make \
+        ca-certificates make \
     && rm -rf /var/lib/apt/lists/*
 
 COPY . /app

@@ -51,8 +51,8 @@ init: $(PREREQUISITES)
 #------------------------------------------------------------------------------#
 
 
-## run
 .PHONY: run
+## run script
 run: $(PREREQUISITES)
 	python3 main.py
 
@@ -69,16 +69,21 @@ DOCKER_TAG      = $(shell git describe --tags --always --dirty)
 DOCKER_IMAGE    = $(DOCKER_REGISTRY)/$(DOCKER_PROJECT):$(DOCKER_TAG)
 
 
-## docker
 DOCKERFILE=Dockerfile
 .PHONY: docker
+## build docker image
 docker: $(PREREQUISITES)
 	$(DOCKER) build --no-cache -t $(DOCKER_IMAGE) -f $(DOCKERFILE) .
 
-## push
 .PHONY: push
+## push docker image
 push:
 	$(DOCKER) push $(DOCKER_IMAGE)
+
+.PHONY: docker-run
+## run docker image
+docker-run:
+	$(DOCKER) run --rm -it $(DOCKER_IMAGE)
 
 
 #------------------------------------------------------------------------------#

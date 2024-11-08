@@ -1,0 +1,36 @@
+name: build
+
+on:
+  create:
+    tags:
+      - v*
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Get Version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+        shell: bash
+
+      - name: Login Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+      - name: Build and Push Docker
+        shell: bash
+        run: |
+          DOCKER_REPO=gitsang
+          DOCKER_NAME=pt-auto-login
+          DOCKER_TAG=${{ steps.get_version.outputs.VERSION }}
+
+          docker build -f Dockerfile --no-cache -t ${DOCKER_REPO}/${DOCKER_NAME}:${DOCKER_TAG} .
+          docker tag ${DOCKER_REPO}/${DOCKER_NAME}:${DOCKER_TAG} ${DOCKER_REPO}/${DOCKER_NAME}:latest
+          docker push ${DOCKER_REPO}/${DOCKER_NAME}:${DOCKER_TAG}
+          docker push ${DOCKER_REPO}/${DOCKER_NAME}:latest

@@ -39,7 +39,7 @@ def login():
     login_button.click()
 
     # 4. check if need otp code
-    if check_login():
+    if check_login(driver):
         logging.info("login success")
     else:
         # 4.1 input otp code
@@ -55,7 +55,7 @@ def login():
         login_button.click()
 
         # 4.3 recheck if login success
-        if check_login():
+        if check_login(driver):
             logging.info("login success")
         else:
             logging.info("login failed")

@@ -73,7 +73,7 @@ DOCKERFILE=Dockerfile
 .PHONY: docker
 ## build docker image
 docker: $(PREREQUISITES)
-	$(DOCKER) build --no-cache -t $(DOCKER_IMAGE) -f $(DOCKERFILE) .
+	$(DOCKER) build -t $(DOCKER_IMAGE) -f $(DOCKERFILE) .
 
 .PHONY: push
 ## push docker image

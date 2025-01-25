@@ -17,11 +17,7 @@ def check_login(driver = None):
         return False
     return True
 
-def login():
-    # 0. prepare
-    driver = DriverUtils.get_driver()
-    driver.implicitly_wait(10)
-
+def login(driver):
     # 1. open login page
     logging.info("login...")
     page = BasePage(driver)
@@ -65,12 +61,16 @@ def login():
     DriverUtils.close_driver(driver)
 
 if __name__ == "__main__":
-    # 0. load environment
+    # load environment
     load_dotenv()
     base_url = os.getenv('BASE_URL') or ""
     username = os.getenv('USERNAME') or ""
     password = os.getenv('PASSWORD') or ""
     totp_sec = os.getenv('TOTP_SEC') or ""
 
+    # init driver
+    driver = DriverUtils.get_driver()
+    driver.implicitly_wait(10)
+
     # 1. login
-    login()
+    login(driver)

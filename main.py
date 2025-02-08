@@ -3,6 +3,7 @@ from utils.driver_utils import DriverUtils
 from selenium.webdriver.common.by import By
 from dotenv import load_dotenv
 import logging
+import argparse
 import os
 import pyotp
 
@@ -61,16 +62,26 @@ def login(driver):
     DriverUtils.close_driver(driver)
 
 if __name__ == "__main__":
-    # load environment
+    # parse command line arguments
+    parser = argparse.ArgumentParser(description='Login script')
+    parser.add_argument('--base_url', type=str, help='Base URL for login')
+    parser.add_argument('--username', type=str, help='Username for login')
+    parser.add_argument('--password', type=str, help='Password for login')
+    parser.add_argument('--totp_sec', type=str, help='TOTP secret for OTP')
+    parser.add_argument('--headless', type=bool, default=True, help='Enable headless mode')
+    args = parser.parse_args()
+
+    # load environment variables
     load_dotenv()
-    base_url = os.getenv('BASE_URL') or ""
-    username = os.getenv('USERNAME') or ""
-    password = os.getenv('PASSWORD') or ""
-    totp_sec = os.getenv('TOTP_SEC') or ""
+    base_url = args.base_url or os.getenv('BASE_URL') or ""
+    username = args.username or os.getenv('USERNAME') or ""
+    password = args.password or os.getenv('PASSWORD') or ""
+    totp_sec = args.totp_sec or os.getenv('TOTP_SEC') or ""
+    headless = args.headless if args.headless is not None else (os.getenv('HEADLESS', 'True').lower() in ['true', '1', 't'])
 
     # init driver
-    driver = DriverUtils.get_driver()
+    driver = DriverUtils.get_driver(headless=headless)
     driver.implicitly_wait(10)
 
-    # 1. login
+    # login
     login(driver)

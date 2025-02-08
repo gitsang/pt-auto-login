@@ -4,11 +4,12 @@ from selenium.webdriver.firefox.options import Options
 
 class DriverUtils:
     @classmethod
-    def get_driver(cls):
+    def get_driver(cls, headless=True):
         # 初始化 WebDriver
         service = Service('./drivers/geckodriver')
         options = Options()
-        options.add_argument("--headless")
+        if headless:
+            options.add_argument("--headless")
         options.add_argument("--disable-gpu")
         options.add_argument("--disable-extensions")
         options.add_argument("--disable-infobars")

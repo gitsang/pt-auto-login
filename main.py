@@ -54,7 +54,7 @@ def login(driver):
         logging.info("login success")
         send = load_send()
         if callable(send):
-            send("PtAutoLogin", f"{base_url} login failed")
+            send("PtAutoLogin", f"{base_url} login success")
         else:
             logging.info("notify failed")
     else:

@@ -12,6 +12,7 @@ docker run --rm \
     -e "USERNAME=xxxxx" \
     -e "PASSWORD=xxxxx" \
     -e "TOTP_SEC=xxxxx" \
+    -e "BARK_PUSH=https://api.day.app/xxx" \
     gitsang/pt-auto-login:latest
 ```
 

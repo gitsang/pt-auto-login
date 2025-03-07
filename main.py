@@ -6,8 +6,22 @@ import logging
 import argparse
 import os
 import pyotp
+from os import path
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s: %(message)s')
+
+
+def load_send():
+    cur_path = path.abspath(path.dirname(__file__))
+    if path.exists(cur_path + "/utils/notify.py"):
+        try:
+            from utils.notify import send
+            return send
+        except ImportError:
+            return False
+    else:
+        return False
+
 
 def check_login(driver = None):
     if driver is None:
@@ -38,6 +52,11 @@ def login(driver):
     # 4. check if need otp code
     if check_login(driver):
         logging.info("login success")
+        send = load_send()
+        if callable(send):
+            send("PtAutoLogin", f"{base_url} login success")
+        else:
+            logging.info("notify failed")
     else:
         # 4.1 input otp code
         logging.info("verifing otp...")
@@ -52,10 +71,19 @@ def login(driver):
         login_button.click()
 
         # 4.3 recheck if login success
+        send = load_send()
         if check_login(driver):
             logging.info("login success")
+            if callable(send):
+                send("PtAutoLogin", f"{base_url} login success")
+            else:
+                logging.info("notify failed")
         else:
             logging.info("login failed")
+            if callable(send):
+                send("PtAutoLogin", f"{base_url} login failed")
+            else:
+                logging.info("notify failed")
 
     # 5. close driver
     logging.info("closing driver...")

@@ -59,7 +59,7 @@ def login(driver):
         if check_login(driver):
             logging.info("login success")
         else:
-            logging.info("login failed")
+            logging.error("login failed")
 
     # 5. close driver
     logging.info("closing driver...")

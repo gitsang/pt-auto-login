@@ -17,8 +17,10 @@ def check_login(driver=None):
         driver = DriverUtils.get_driver()
     try:
         driver.find_element(By.XPATH, "//span[text()='當前活動']")
-    except:
+    except Exception as e:
+        logging.error(f"login failed {e}")
         return False
+    logging.info("login success")
     return True
 
 
@@ -40,9 +42,7 @@ def login(driver):
     login_button.click()
 
     # 4. check if need otp code
-    if check_login(driver):
-        logging.info("login success")
-    else:
+    if not check_login(driver):
         # 4.1 input otp code
         logging.info("verifing otp...")
         otp_code_input = driver.find_element(By.ID, "otpCode")
@@ -56,10 +56,7 @@ def login(driver):
         login_button.click()
 
         # 4.3 recheck if login success
-        if check_login(driver):
-            logging.info("login success")
-        else:
-            logging.error("login failed")
+        check_login(driver)
 
     # 5. close driver
     logging.info("closing driver...")

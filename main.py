@@ -1,5 +1,6 @@
 from pages.base_page import BasePage
 from utils.driver_utils import DriverUtils
+from utils.logging import SetupLogging
 from selenium.webdriver.common.by import By
 from dotenv import load_dotenv
 import logging
@@ -86,6 +87,9 @@ if __name__ == "__main__":
         if args.headless is not None
         else (os.getenv("HEADLESS", "True").lower() in ["true", "1", "t"])
     )
+
+    WEBHOOK_URL = "https://your-webhook-url.com"  # 替换为实际的Webhook URL
+    SetupLogging(WEBHOOK_URL)
 
     # init driver
     driver = DriverUtils.get_driver(headless=headless)
